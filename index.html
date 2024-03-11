@@ -124,7 +124,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="title">인터벌 러닝</h1>
+        <h1 class="title">Custom Interval Running</h1>
         <div id="intervals">
             <div class="interval">
                 <div class="custom_box">
@@ -137,78 +137,113 @@
         </div>
         <div id="myIntervalPlan">
               <!--인터벌 구간 추가 버튼을 누르면 custome_box에서 설정한 값이 plan 태그 하나씩 추가되어야 함 id는 추가한 순서대로 자동 부여되게-->
+              <!--plan 태그에 running 클래스가 붙으면 시간(분) 의 시간이 00:00까지 카운트다운 되어야 함-->
+              <!--00:00까지 카운트다운 되면 이 plan의 running 클래스는 제거. 다음 plan에 running 클래스가 붙고 카운트다운 또 시작 -->
+              <!--마지막 plan의 시간(분) 도 00:00까지 카운트다운 되면 완성-->
         </div>
         <div class="btn_wrap">
             <button onclick="addInterval()" id="add_interval_btn">인터벌 구간 추가</button>
             <button onclick="startInterval()" id="start_btn">시작! 😎</button>
         </div>
-        <!--시작 버튼을 누르면 result만 화면에 보이게 하기-->
-        <div id="result" style="display: none;">
-            <div class="box">
-                <p>남은 시간 : <span id="remaining_time">00:00</span></p>
-            </div>
-            <div class="box">
-                <p>다음 구간 : <span id="next_speed">7</span>km/h <span id="next_time">5</span> 분</p>
-            </div>
-        </div>
     </div>
-
     <script>
-        function startInterval() {
-            var result = document.getElementById("result");
-            result.innerHTML = "";
-            intervals = [];
-
-            var speedInputs = document.querySelectorAll(".speed");
-            var durationInputs = document.querySelectorAll(".duration");
-
-            for (var i = 0; i < speedInputs.length; i++) {
-                var speed = parseInt(speedInputs[i].value);
-                var duration = parseInt(durationInputs[i].value);
-
-                if (!isNaN(speed) && !isNaN(duration)) {
-                    intervals.push({ speed: speed, duration: duration * 60 }); // 시간을 초 단위로 변환
-                }
-            }
-
-            currentIntervalIndex = 0;
-            updateInterval();
-        }
-
+        var intervals = []; // 사용자가 추가한 인터벌을 저장할 배열
+        var currentIntervalIndex = 0; // 현재 진행 중인 인터벌의 인덱스
+    
+        // 인터벌 추가 함수
         function addInterval() {
-    var speedInput = document.getElementById("speedInterval");
-    var timeInput = document.getElementById("timeInterval");
-
-    var speed = speedInput.value;
-    var time = timeInput.value;
-
-    if (speed === "" || time === "") {
-        alert("속도와 시간을 입력하세요.");
-        return;
-    }
-
-    var intervalsContainer = document.getElementById("myIntervalPlan");
-    var newInterval = document.createElement("div");
-    newInterval.classList.add("plan");
-
-    // 인터벌 번호를 가져와서 동적으로 ID 부여
-    var intervalCount = intervalsContainer.childElementCount + 1;
-    newInterval.id = "interval_" + intervalCount;
-
-    // 추가된 인터벌의 속도와 시간 설정
-    newInterval.innerHTML = `
-        🏃‍♂️ 속도 : <span id="interval_${intervalCount}_speed">${speed}</span> km/h | ⏱️ 시간(분) : <span id="interval_${intervalCount}_time">${time}</span> 분
-    `;
-    intervalsContainer.appendChild(newInterval);
-
-    // 입력 필드 초기화
-    speedInput.value = "";
-    timeInput.value = "";
-}
-        function startNextInterval() {
-            updateInterval(); // 다음 인터벌 시작
+            var speedInput = document.getElementById("speedInterval");
+            var timeInput = document.getElementById("timeInterval");
+    
+            var speed = speedInput.value;
+            var time = timeInput.value;
+    
+            // 입력값에 따라 시간 포맷 설정
+            if (time >= 1 && time <= 9) {
+                time = "0" + time + ":00";
+            } else if (time >= 10) {
+                time = time + ":00";
+            } else {
+                alert("올바른 시간을 입력하세요.");
+                return;
+            }
+    
+            if (speed === "" || time === "") {
+                alert("속도와 시간을 입력하세요.");
+                return;
+            }
+    
+            var intervalsContainer = document.getElementById("myIntervalPlan");
+            var newInterval = document.createElement("div");
+            newInterval.classList.add("plan");
+    
+            // 추가된 인터벌의 속도와 시간 설정
+            newInterval.innerHTML = `
+                🏃‍♂️ 속도 : <span>${speed}</span> km/h | ⏱️ 시간(분) : <span class="time">${time}</span>
+            `;
+            intervalsContainer.appendChild(newInterval);
+    
+            // 입력된 인터벌을 배열에 추가
+            intervals.push({speed: speed, time: time});
+    
+            // 입력 필드 초기화
+            speedInput.value = "";
+            timeInput.value = "";
         }
-
+    
+        // 시작 버튼 클릭 시
+        function startInterval() {
+            // 인터벌이 추가되지 않은 경우
+            if (intervals.length === 0) {
+                alert("인터벌을 추가하세요.");
+                return;
+            }
+    
+            // 첫 번째 인터벌 시작
+            startNextInterval();
+        }
+    
+        // 다음 인터벌 시작 함수
+        function startNextInterval() {
+            // 현재 진행 중인 인터벌에 running 클래스 추가
+            var currentInterval = document.getElementsByClassName("plan")[currentIntervalIndex];
+            currentInterval.classList.add("running");
+    
+            // 현재 인터벌의 시간(분) 가져오기
+            var timeSpan = currentInterval.querySelector(".time");
+            var time = timeSpan.innerText;
+            var [minutes, seconds] = time.split(":").map(Number);
+    
+            // 카운트다운 시작
+            var timer = setInterval(function() {
+                // 시간 감소
+                seconds--;
+                if (seconds < 0) {
+                    seconds = 59;
+                    minutes--;
+                }
+    
+                // 시간 업데이트
+                timeSpan.innerText = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    
+                // 현재 인터벌 종료 조건 확인
+                if (minutes === 0 && seconds === 0) {
+                    clearInterval(timer);
+                    currentIntervalIndex++; // 다음 인터벌로 인덱스 이동
+                    currentInterval.classList.remove("running"); // 현재 인터벌에서 running 클래스 제거
+    
+                    // 모든 인터벌이 종료되었을 때
+                    if (currentIntervalIndex === intervals.length) {
+                        alert("인터벌이 종료되었습니다.");
+                        return;
+                    }
+    
+                    // 다음 인터벌 시작
+                    startNextInterval();
+                }
+            }, 1000);
+        }
     </script>
+    
 </body>
 </html>
