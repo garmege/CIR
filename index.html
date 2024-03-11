@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- meta -->
+    <meta property="og:url" content="https://custom-interval-running.netlify.app/">
+    <meta property="og:title" content="커스텀 인터벌 러닝">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="images/geumdamgom.jpg">
+    <meta property="og:description" content="내가 쓰려고 만든 커스텀 인터벌 러닝 사이트">
+    <title>커스텀 인터벌 러닝 페이지를 만들겁니다.</title>
+    <style>
+        @font-face {
+            font-family: 'YClover-Bold';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/YClover-Bold.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Pretendard-Regular';
+            src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        /*컬러 프리셋*/
+        :root {
+            --main-blue : #056CF2;
+            --main-sky-blue : #05DBF2;
+            --main-mint : #05F2DB;
+            --main-orange : #F28705;
+            --main-red : #F24405;
+        }
+        * {
+            font-family: 'Pretendard-Regular';
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #000;
+            color: #fff;
+        }
+        h1.title {
+            font-family: 'YClover-Bold';
+            font-size: 32px;
+            color: var(--main-sky-blue);
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        #intervals {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: 1px solid #eee;
+        }
+        .interval {
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            column-gap: 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .custom_box {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        label {
+            font-size: 14px;
+            line-height: 22px;
+            height: 40px;
+        }
+        input {
+            width: 80px;
+            height: 40px;
+            background-color: transparent;
+            border: 1px solid var(--main-orange);
+            border-radius: 4px;
+            color: #fff;
+            text-align: center;
+            font-size: 20px;
+        }
+        .btn_wrap {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            column-gap: 20px;
+        }
+        .btn_wrap button {
+            flex:1;
+        }
+        button {
+            line-height: 40px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #add_interval_btn {
+            background-color: var(--main-mint);
+            color: #000;
+        }
+        #start_btn {
+            background-color: var(--main-red);
+            color: #fff;
+        }
+        #myIntervalPlan {
+            margin: 20px 0;
+        }
+        .plan {
+            border: 1px solid var(--main-sky-blue);
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">인터벌 러닝</h1>
+        <div id="intervals">
+            <div class="interval">
+                <div class="custom_box">
+                    <label for="speedInterval">속도<br>(km/h)</label>
+                    <input type="number" id="speedInterval">
+                    <label for="timeInterval">시간<br>(분)</label>
+                    <input type="number" id="timeInterval">
+                </div>
+            </div>
+        </div>
+        <div id="myIntervalPlan">
+              <!--인터벌 구간 추가 버튼을 누르면 custome_box에서 설정한 값이 plan 태그 하나씩 추가되어야 함 id는 추가한 순서대로 자동 부여되게-->
+        </div>
+        <div class="btn_wrap">
+            <button onclick="addInterval()" id="add_interval_btn">인터벌 구간 추가</button>
+            <button onclick="startInterval()" id="start_btn">시작! 😎</button>
+        </div>
+        <!--시작 버튼을 누르면 result만 화면에 보이게 하기-->
+        <div id="result" style="display: none;">
+            <div class="box">
+                <p>남은 시간 : <span id="remaining_time">00:00</span></p>
+            </div>
+            <div class="box">
+                <p>다음 구간 : <span id="next_speed">7</span>km/h <span id="next_time">5</span> 분</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startInterval() {
+            var result = document.getElementById("result");
+            result.innerHTML = "";
+            intervals = [];
+
+            var speedInputs = document.querySelectorAll(".speed");
+            var durationInputs = document.querySelectorAll(".duration");
+
+            for (var i = 0; i < speedInputs.length; i++) {
+                var speed = parseInt(speedInputs[i].value);
+                var duration = parseInt(durationInputs[i].value);
+
+                if (!isNaN(speed) && !isNaN(duration)) {
+                    intervals.push({ speed: speed, duration: duration * 60 }); // 시간을 초 단위로 변환
+                }
+            }
+
+            currentIntervalIndex = 0;
+            updateInterval();
+        }
+
+        function addInterval() {
+    var speedInput = document.getElementById("speedInterval");
+    var timeInput = document.getElementById("timeInterval");
+
+    var speed = speedInput.value;
+    var time = timeInput.value;
+
+    if (speed === "" || time === "") {
+        alert("속도와 시간을 입력하세요.");
+        return;
+    }
+
+    var intervalsContainer = document.getElementById("myIntervalPlan");
+    var newInterval = document.createElement("div");
+    newInterval.classList.add("plan");
+
+    // 인터벌 번호를 가져와서 동적으로 ID 부여
+    var intervalCount = intervalsContainer.childElementCount + 1;
+    newInterval.id = "interval_" + intervalCount;
+
+    // 추가된 인터벌의 속도와 시간 설정
+    newInterval.innerHTML = `
+        🏃‍♂️ 속도 : <span id="interval_${intervalCount}_speed">${speed}</span> km/h | ⏱️ 시간(분) : <span id="interval_${intervalCount}_time">${time}</span> 분
+    `;
+    intervalsContainer.appendChild(newInterval);
+
+    // 입력 필드 초기화
+    speedInput.value = "";
+    timeInput.value = "";
+}
+        function startNextInterval() {
+            updateInterval(); // 다음 인터벌 시작
+        }
+
+    </script>
+</body>
+</html>
