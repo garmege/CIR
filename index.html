@@ -11,17 +11,10 @@
     <meta property="og:description" content="내가 쓰려고 만든 커스텀 인터벌 러닝 사이트">
     <title>커스텀 인터벌 러닝 페이지</title>
     <style>
-        @font-face {
-            font-family: 'YClover-Bold';
-            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/YClover-Bold.woff2') format('woff2');
-            font-weight: 700;
-            font-style: normal;
-        }
-        @font-face {
-            font-family: 'Pretendard-Regular';
-            src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-            font-weight: 400;
-            font-style: normal;
+        @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+        @font-face{
+            font-family:'DNFBitBitv2';
+            font-style:normal;font-weight:400;src:url('//cdn.df.nexon.com/img/common/font/DNFBitBitv2.otf')format('opentype')
         }
 
         /*컬러 프리셋*/
@@ -31,15 +24,17 @@
             --sub-purple : #DCC5FF;
         }
         * {
-            font-family: 'Pretendard-Regular';
+            font-family: "Pretendard Variable";
             box-sizing: border-box;
+            font-size: 16px;
+            font-weight: 500;
         }
         body {
             background-color: #090238;
             color: #fff;
         }
         h1.title {
-            font-family: 'YClover-Bold';
+            font-family: 'DNFBitBitv2';
             font-size: 32px;
             color: var(--main-pink);
         }
@@ -93,6 +88,7 @@
         }
         .btn_wrap button {
             flex:1;
+            font-family: 'DNFBitBitv2';
         }
         button {
             line-height: 40px;
