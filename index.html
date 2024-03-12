@@ -43,8 +43,8 @@
             flex-wrap: wrap;
             width: 100%;
             margin-bottom: 20px;
-            border-radius: 10px;
-            border: 1px solid #eee;
+            border-radius: 6px;
+            border: 1px solid var(--sub-purple);
         }
         .interval {
             width: 100%;
@@ -84,9 +84,17 @@
         .btn_wrap button {
             flex:1;
         }
+        .btn_wrap button:hover, .btn_wrap button:active {
+            box-shadow: inset -4px -4px 0px 0 rgba(0,0,0,0.2);
+        }
+        .btn_wrap button:hover span, .btn_wrap button:active span {
+            position: relative;
+            top: -4px;
+            left: -4px;
+        }
         button {
             line-height: 40px;
-            border-radius: 10px;
+            border-radius: 6px;
             border: none;
             font-size: 16px;
             cursor: pointer;
@@ -134,7 +142,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Custom Interval Running</h1>
+        <h1 class="title">커스텀 인터벌 러닝</h1>
         <div id="intervals">
             <div class="interval">
                 <div class="custom_box">
@@ -152,8 +160,9 @@
               <!--마지막 plan의 시간(분) 도 00:00까지 카운트다운 되면 완성-->
         </div>
         <div class="btn_wrap">
-            <button onclick="addInterval()" id="add_interval_btn">인터벌 구간 추가</button>
-            <button onclick="startInterval()" id="start_btn">시작! 😎</button>
+            <button onclick="addInterval()" id="add_interval_btn"><span>PLAN ADD</span></button>
+            <button onclick="startInterval()" id="start_btn"><span>START</span></button>
+            <button onclick="resetPlans()" id="reset_btn" type="reset"><span>RESET</span></button>
         </div>
     </div>
     <script>
@@ -252,6 +261,14 @@
                     startNextInterval();
                 }
             }, 1000);
+        }
+
+        //인터벌 리셋 함수
+        function resetPlans() {
+            var plans = document.querySelectorAll('.plan');
+            plans.forEach(function(plan) {
+                plan.remove();
+            });
         }
     </script>
     
