@@ -12,10 +12,7 @@
     <title>커스텀 인터벌 러닝 페이지</title>
     <style>
         @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
-        @font-face{
-            font-family:'DNFBitBitv2';
-            font-style:normal;font-weight:400;src:url('//cdn.df.nexon.com/img/common/font/DNFBitBitv2.otf')format('opentype')
-        }
+        @import url('https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
 
         /*컬러 프리셋*/
         :root {
@@ -24,17 +21,15 @@
             --sub-purple : #DCC5FF;
         }
         * {
-            font-family: "Pretendard Variable";
+            font-family: 'Galmuri9';
             box-sizing: border-box;
             font-size: 16px;
-            font-weight: 500;
         }
         body {
             background-color: #090238;
             color: #fff;
         }
         h1.title {
-            font-family: 'DNFBitBitv2';
             font-size: 32px;
             color: var(--main-pink);
         }
@@ -88,7 +83,6 @@
         }
         .btn_wrap button {
             flex:1;
-            font-family: 'DNFBitBitv2';
         }
         button {
             line-height: 40px;
@@ -195,7 +189,7 @@
     
             // 추가된 인터벌의 속도와 시간 설정
             newInterval.innerHTML = `
-                🏃‍♂️ 속도 : <span>${speed}</span> km/h | ⏱️ 시간(분) : <span class="time">${time}</span>
+                <span>${speed}</span> km/h <span class="time">${time}</span>
             `;
             intervalsContainer.appendChild(newInterval);
     
