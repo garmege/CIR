@@ -26,24 +26,22 @@
 
         /*컬러 프리셋*/
         :root {
-            --main-blue : #056CF2;
-            --main-sky-blue : #05DBF2;
-            --main-mint : #05F2DB;
-            --main-orange : #F28705;
-            --main-red : #F24405;
+            --main-purple : #8934FF;
+            --main-pink : #ff14bd;
+            --sub-purple : #DCC5FF;
         }
         * {
             font-family: 'Pretendard-Regular';
             box-sizing: border-box;
         }
         body {
-            background-color: #000;
+            background-color: #090238;
             color: #fff;
         }
         h1.title {
             font-family: 'YClover-Bold';
             font-size: 32px;
-            color: var(--main-sky-blue);
+            color: var(--main-pink);
         }
         .container {
             max-width: 600px;
@@ -81,7 +79,7 @@
             width: 80px;
             height: 40px;
             background-color: transparent;
-            border: 1px solid var(--main-orange);
+            border: 1px solid var(--main-purple);
             border-radius: 4px;
             color: #fff;
             text-align: center;
@@ -104,21 +102,43 @@
             cursor: pointer;
         }
         #add_interval_btn {
-            background-color: var(--main-mint);
-            color: #000;
+            background-color: var(--main-pink);
+            color: #fff;
         }
         #start_btn {
-            background-color: var(--main-red);
+            background-color: var(--main-purple);
             color: #fff;
         }
         #myIntervalPlan {
             margin: 20px 0;
         }
         .plan {
-            border: 1px solid var(--main-sky-blue);
+            border: 1px solid var(--main-pink);
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 10px;
+        }
+        .plan.running {
+            background: linear-gradient(-45deg, var(--main-purple), var(--sub-purple), var(--main-purple), var(--main-purple), var(--main-pink));
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        @keyframes gradient {
+            0% {
+            background-position: 0% 50%;
+            }
+            50% {
+            background-position: 100% 50%;
+            }
+            100% {
+            background-position: 0% 50%;
+            }
+        }
+        .plan.running .time {
+            font-size: 28px;
+            font-weight: 800;
+            margin-top: 10px;
+            display: block;
         }
     </style>
 </head>
