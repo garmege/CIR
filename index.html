@@ -80,6 +80,7 @@
             display: flex;
             justify-content: space-between;
             column-gap: 20px;
+            margin-bottom: 10px;
         }
         .btn_wrap button {
             flex:1;
@@ -138,6 +139,14 @@
             margin-top: 10px;
             display: block;
         }
+        .total_interval_time {
+            font-size: 20px;
+            text-align: right;
+        }
+        #total_time {
+            font-size: 20px;
+            color: var(--main-pink);
+        }
         @media screen and (max-width:430px){
             .btn_wrap {
                 column-gap: 10px;
@@ -168,6 +177,9 @@
             <button onclick="addInterval()" id="add_interval_btn"><span>PLAN ADD</span></button>
             <button onclick="startInterval()" id="start_btn"><span>START</span></button>
             <button onclick="resetPlans()" id="reset_btn" type="reset"><span>RESET</span></button>
+        </div>
+        <div class="total">
+            <div class="total_interval_time">총 인터벌 시간 : <span id="total_time">00:00</span></div>
         </div>
     </div>
     <script>
@@ -210,11 +222,41 @@
             // 입력된 인터벌을 배열에 추가
             intervals.push({speed: speed, time: time});
     
+            //입력 시간 합산
+            updateTotalTime();
+
             // 입력 필드 초기화
             speedInput.value = "";
             timeInput.value = "";
         }
-    
+        // 전체 시간 업데이트 함수
+        function updateTotalTime() {
+            var totalHours = 0;
+            var totalMinutes = 0;
+
+            // 모든 .plan .time 요소 선택
+            var timeElements = document.querySelectorAll('.plan .time');
+
+            // 각 .plan .time 요소에서 시간을 합산
+            timeElements.forEach(function(timeElement) {
+                var timeParts = timeElement.textContent.split(":");
+                var hours = parseInt(timeParts[0]);
+                var minutes = parseInt(timeParts[1]);
+
+                totalHours += hours;
+                totalMinutes += minutes;
+            });
+
+            // 분 단위가 60분을 넘어갈 경우 시간으로 환산
+            totalHours += Math.floor(totalMinutes / 60);
+            totalMinutes %= 60;
+
+            // 시간 형식에 맞게 텍스트 설정
+            var totalTimeText = (totalHours < 10 ? "0" + totalHours : totalHours) + ":" + (totalMinutes < 10 ? "0" + totalMinutes : totalMinutes);
+            
+            // #total_time 요소의 텍스트 업데이트
+            document.getElementById("total_time").textContent = totalTimeText;
+        }
         // 시작 버튼 클릭 시
         function startInterval() {
             // 인터벌이 추가되지 않은 경우
@@ -274,6 +316,8 @@
             plans.forEach(function(plan) {
                 plan.remove();
             });
+            // #total_time 요소의 텍스트 업데이트
+            document.getElementById("total_time").textContent = '00:00';
         }
     </script>
     
