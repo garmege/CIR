@@ -10,7 +10,7 @@
 * {
   font-family: "Galmuri9";
   box-sizing: border-box;
-  font-size: 16px;
+  font-size: 14px;
   padding: 0;
   margin: 0;
 }
@@ -94,7 +94,7 @@ button {
   line-height: 40px;
   border-radius: 6px;
   border: none;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
 }
 #add_interval_btn {
