@@ -154,6 +154,10 @@ function startCountdown(plans, index) {
     var time = timeSpan.innerText;
     var [minutes, seconds] = time.split(":").map(Number);
 
+    // currentPlan(running 클래스가 붙여지는 plan)의 위치로 스크롤 이동
+    currentPlan.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    console.log(currentPlan);
+
     var timer = setInterval(function () {
         // 시간 감소
         seconds--;
@@ -171,6 +175,10 @@ function startCountdown(plans, index) {
             currentPlan.classList.remove("running"); // 현재 인터벌에서 running 클래스 제거
             // 다음 인터벌로 이동
             startCountdown(plans, index + 1);
+
+            
         }
-    }, 1000);
+    }
+    
+    , 1000);
 }

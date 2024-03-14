@@ -96,6 +96,7 @@ button {
   border: none;
   font-size: 14px;
   cursor: pointer;
+  color: var(--bg_dark);
 }
 #add_interval_btn {
   background-color: var(--main-pink);
